@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Employee Information</title>
+</head>
+<body>
+
+<table width="700px" align="center" bordercolor="#aaa" cellspacing="0" cellpadding="0">
+    <tr>
+        <td><img width="100%" height="20%" src="{{url_for('static', filename='welcome.jpg')}}"/></td>
+    </tr>
+    <tr height="50px" align="center" style="background-color:#7E9C1A; font-size:20px"><td >Employee Information</td></tr>
+    <tr align="center">
+    <td><a href="http://localhost:5000/mvc/address/">Address</a> &nbsp <a href="http://localhost:5000/mvc/company/">Company</a>
+            &nbsp <a href="http://localhost:5000/mvc/employee/">Employee</a></td>
+    </tr>
+    <tr height="15px"><td></td></tr>
+
+<form action="http://localhost:5000/mvc/employee/", method="post" width="700px" align="center" border="1" bordercolor="#aaa">
+    <tr><td><font color="red">{{action}}</font></td></tr>
+    <tr><td style="padding-left:50px; padding-bottom:10px">
+        {% if emp.id==0 %}
+            <label hidden>Employee Id:</label><input type="text" name="eid" value="{{emp.id}}" hidden><br><br>
+        {% else %}
+            Employee Id: <input type="text" name="eid" value="{{emp.id}}" readonly><br><br>
+        {% endif %}
+        Employee Name: <input type="text" name="ename" value="{{emp.name}}" required><br><br>
+        Employee Age: <input type="text" name="eage" value="{{emp.age}}" required><br><br>
+        Employee Salary: <input type="text" name="esal" value="{{emp.salary}}" required><br><br>
+        Employee Company: <select name="cmp" required>
+                                <option value="0">--select--</option>
+                            {% for cmp in cmps %}
+                                {% if emp.cmp_id == cmp.id %}
+                                    <option value="{{cmp.id}}" selected>{{cmp.name}}</option>
+                                {% else %}
+                                    <option value="{{cmp.id}}">{{cmp.name}}</option>
+                                {% endif %}
+                            {% endfor %}
+                            </select><br><br>
+        Employee Address: <select name="adrs" multiple required>
+                                <option value="0">--select--</option>
+                            {% for adr in adrs %}
+                                {% if emp.adrsref.id == adr.id %}
+                                    <option value="{{adr.id}}" selected>{{adr.city}}</option>
+                                {% else %}
+                                    <option value="{{adr.id}}">{{adr.city}}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select><br><br>
+        <input type="submit" style="background-color:#E08F52">
+    </td></tr>
+</form>
+
+<table align="center" border="1" bordercolor="#aaa" width="700px" align="center">
+    <thead>
+        <th>EmpId</th>
+        <th>EmpName</th>
+        <th>EmpAge</th>
+        <th>EmpSalary</th>
+        <th>EmpAddress</th>
+        <th>EmpCompany</th>
+        <th>EmpCmpAddress</th>
+        <th>Action</th>
+    </thead>
+    {% for emp in emps %}
+    <tr align="center">
+        <td>{{emp.id}}</td>
+        <td>{{emp.name}}</td>
+        <td>{{emp.age}}</td>
+        <td>{{emp.salary}}</td>
+        <td>{% for adr in emp.adrsref %}
+            {{adr.city}} | {{adr.state}} | {{adr.pincode}} <br>
+            {% endfor %}
+        </td>
+        <td>{{emp.cmpref.name}}</td>
+        <td>{{emp.cmpref.adrref.city}}</td>
+        <td>
+            <a href="http://localhost:5000/mvc/employee/edit/{{emp.id}}">Edit</a>
+            <a href="http://localhost:5000/mvc/employee/delete/{{emp.id}}">Delete</a>
+        </td>
+        </tr>
+    {% endfor %}
+
+</table>
+</table>
+</body>
+</html>
